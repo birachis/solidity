@@ -13,8 +13,7 @@ contract Contract {
 	receive() external payable { }
 
 	function donate() public {
-		(bool success, ) = charity.call{ value: address(this).balance }("");
-		require(success);
+		selfdestruct(payable(charity));
 	}
 
 	function tip() public payable {
