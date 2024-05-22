@@ -2,9 +2,10 @@
 pragma solidity ^0.8.20;
 
 contract Sidekick {
-    function sendAlert(address hero, uint enemies, bool armed) external {
+    function makeContact(address hero) external {
+        // send over any calldata that doesnt match existing signatures!
         (bool success, ) = hero.call(
-            abi.encodeWithSignature("alert(uint256,bool)", enemies, armed)
+            abi.encodeWithSignature("")
         );
 
         require(success);
