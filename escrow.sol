@@ -12,12 +12,18 @@ contract Escrow {
 		depositor = msg.sender;
 	}
 
+	event Approved(uint);
+	
 	error NotAuthorized();
 
 	function approve() external {
 		if(msg.sender != arbiter) revert NotAuthorized();
-		
-		(bool success, ) = beneficiary.call{ value: address(this).balance }("");
+
+		uint balance = address(this).balance;
+
+		(bool success, ) = beneficiary.call{ value: balance }("");
 		require(success);
+		
+		emit Approved(balance);
 	}
 }
