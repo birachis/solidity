@@ -9,9 +9,9 @@ contract Contract {
 		address voter;
 	}
 
-	Vote public vote;
-
+	Vote[] public votes; 
+	
 	function createVote(Choices choice) external {
-		vote = Vote(choice, msg.sender);
+		votes.push(Vote(choice, msg.sender));
 	}
 }
