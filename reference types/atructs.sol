@@ -14,7 +14,14 @@ contract Contract {
 	Vote[] public votes; 
 
 	function createVote(Choices choice) external {
+		require(!hasVoted(msg.sender));
 		votes.push(Vote(choice, msg.sender));
+	}
+
+	function changeVote(Choices choice) external {
+		Vote storage vote = findVote(msg.sender);
+		require(vote.voter != none.voter);
+		vote.choice = choice;
 	}
 
 	function findVote(address voter) internal view returns(Vote storage) {
