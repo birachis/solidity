@@ -2,17 +2,23 @@
 pragma solidity ^0.8.20;
 
 contract Contract {
-	mapping(address => bool) public members;
-
-	function addMember(address x) external {
-		members[x] = true;
+	struct User {
+		uint balance;
+		bool isActive;
 	}
 
-	function removeMember(address x) external {
-		members[x] = false;
+	mapping(address => User) public users;
+
+	function createUser() external {
+		require(!users[msg.sender].isActive);
+		users[msg.sender] = User(100, true);
 	}
 
-	function isMember(address x) external view returns(bool) {
-		return members[x];
+	function transfer(address to, uint amount) external {
+		require(users[msg.sender].isActive);
+		require(users[to].isActive);
+		require(users[msg.sender].balance >= amount);
+		users[msg.sender].balance -= amount;
+		users[to].balance += amount;
 	}
 }
