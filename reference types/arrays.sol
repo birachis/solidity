@@ -2,9 +2,13 @@
 pragma solidity 0.8.20;
 
 contract Contract {
-	function sum(uint[5] calldata x) external pure returns(uint total) {
-		for(uint i = 0; i < 5; i++) {
-			total += x[i];
+	uint[] public evenNumbers;
+
+	function filterEven(uint[] calldata x) external {
+		for(uint i = 0; i < x.length; i++) {
+			if(x[i] % 2 == 0) {
+				evenNumbers.push(x[i]);
+			}
 		}
 	}
 }
