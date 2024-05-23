@@ -13,8 +13,12 @@ contract Voting {
     }
     
     Proposal[] public proposals;
+
+    event ProposalCreated(uint);
+    event VoteCast(uint, address indexed);
     
     function newProposal(address _target, bytes calldata _data) external {
+        emit ProposalCreated(proposals.length);
         Proposal storage proposal = proposals.push();
         proposal.target = _target;
         proposal.data = _data;
@@ -23,7 +27,7 @@ contract Voting {
     function castVote(uint _proposalId, bool _supports) external {
         Proposal storage proposal = proposals[_proposalId];
 
-
+        // clear out previous vote 
         if(proposal.voteStates[msg.sender] == VoteStates.Yes) {
             proposal.yesCount--;
         }
@@ -31,7 +35,7 @@ contract Voting {
             proposal.noCount--;
         }
 
-
+        // add new vote 
         if(_supports) {
             proposal.yesCount++;
         }
@@ -39,6 +43,10 @@ contract Voting {
             proposal.noCount++;
         }
 
+        // we're tracking whether or not someone has already voted 
+        // and we're keeping track as well of what they voted
         proposal.voteStates[msg.sender] = _supports ? VoteStates.Yes : VoteStates.No;
+
+        emit VoteCast(_proposalId, msg.sender);
     }
 }
